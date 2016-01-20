@@ -1,0 +1,34 @@
+{
+  "name": "koa-remove-trailing-slashes",
+  "version": "1.0.0",
+  "description": "Koa middleware that makes sure all requests does not have trailing slashes",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run lint && npm run test:coverage",
+    "test:unit": "mocha test",
+    "test:coverage": "node --harmony node_modules/istanbul/lib/cli.js cover _mocha -- test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vgno/koa-remove-trailing-slashes.git"
+  },
+  "keywords": [
+    "koa",
+    "middleware",
+    "slash",
+    "trailing",
+    "redirect",
+    "remove"
+  ],
+  "author": "VG",
+  "license": "MIT",
+  "devDependencies": {
+    "coveralls": "~2.11.6",
+    "eslint": "~1.10.3",
+    "eslint-config-vgno": "~5.0.0",
+    "expect": "~1.13.4",
+    "istanbul": "~0.4.2",
+    "mocha": "~2.3.4"
+  }
+}
