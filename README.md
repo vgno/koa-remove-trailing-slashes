@@ -2,6 +2,8 @@
 
 Koa middleware that removes trailing slashes on paths.
 
+**Notice: koa-remove-trailing-slashes@2 supports koa@2; if you want to use this module with koa@1, please use koa-remove-trailing-slashes@1.**
+
 [![Build Status](https://img.shields.io/travis/vgno/koa-remove-trailing-slashes/master.svg?style=flat-square)](http://travis-ci.org/vgno/koa-remove-trailing-slashes) [![Coverage Status](https://img.shields.io/coveralls/vgno/koa-remove-trailing-slashes/master.svg?style=flat-square)](https://coveralls.io/r/vgno/koa-remove-trailing-slashes) [![npm](https://img.shields.io/npm/v/koa-remove-trailing-slashes.svg?style=flat-square)](https://www.npmjs.com/package/koa-remove-trailing-slashes)
 
 ## Installation
@@ -11,8 +13,8 @@ npm install koa-remove-trailing-slashes
 
 ## API
 ```js
-var koa = require('koa');
-var app = koa();
+const Koa = require('koa');
+const app = Koa();
 app.use(require('koa-remove-trailing-slashes')(opts));
 ```
 
@@ -25,15 +27,15 @@ app.use(require('koa-remove-trailing-slashes')(opts));
 
 ## Example
 ```js
-var koa = require('koa');
-var removeTrailingSlashes = require('koa-remove-trailing-slashes');
+const Koa = require('koa');
+const removeTrailingSlashes = require('koa-remove-trailing-slashes');
 
-var app = koa();
+const app = new Koa();
 
 app.use(removeTrailingSlashes());
 
-app.use(function *(){
-  this.body = 'Hello World';
+app.use(ctx => {
+  ctx.body = 'Hello World';
 });
 
 app.listen(3000);
