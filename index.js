@@ -19,17 +19,27 @@ function removeTrailingSlashes(opts) {
         }
 
         let path;
+        let querystring = '';
 
         // We have already done a redirect and we will continue if we are in chained mode
         if (opts.chained && ctx.status === 301) {
-            path = getPath(ctx.response.get('Location'), ctx.querystring);
+            const location = ctx.response.get('Location') || '';
+
+            // We can't use ctx.querystring because it may not be up to date
+            const parsedLocation = location.match(/\?(.*)$/);
+            if (parsedLocation && parsedLocation[1]) {
+                querystring = parsedLocation[1];
+            }
+
+            path = getPath(location, querystring);
         } else if (ctx.status !== 301) {
+            querystring = ctx.querystring;
             path = getPath(ctx.originalUrl, ctx.querystring);
         }
 
         if (path && haveSlash(path)) {
             path = path.slice(0, -1);
-            const query = ctx.querystring.length ? '?' + ctx.querystring : '';
+            const query = querystring.length ? '?' + querystring : '';
 
             ctx.status = 301;
             ctx.redirect(path + query);
