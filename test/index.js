@@ -68,6 +68,24 @@ describe('koa-remove-trailing-slashes', () => {
                 expect(mock.ctx.status).toBe(301);
             });
 
+            it('should correctly chain redirect if path has trailing slash and query params', async () => {
+                const mock = createMock('/fOo/?baz=1', 'baz=1');
+
+                // Mock that something has made a redirect before us
+                mock.ctx.status = 301;
+                mock.ctx.body = 'Redirecting to …';
+                mock.ctx.response = {
+                    get() {
+                        return '/foo/?bar=1';
+                    }
+                };
+
+                await removeTrailingSlashes()(mock.ctx, mock.next);
+
+                expect(mock.redirectMock.calls[0].arguments[0]).toEqual('/foo?bar=1');
+                expect(mock.ctx.status).toBe(301);
+            });
+
             it('should redirect on url and path has trailing slash', async () => {
                 const mock = createMock('/foo/');
                 await removeTrailingSlashes()(mock.ctx, mock.next);
