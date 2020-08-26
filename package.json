@@ -1,6 +1,6 @@
 {
   "name": "koa-remove-trailing-slashes",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Koa middleware that makes sure all requests does not have trailing slashes",
   "main": "index.js",
   "scripts": {
