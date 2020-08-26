@@ -86,7 +86,7 @@ describe('koa-remove-trailing-slashes', () => {
                 expect(mock.ctx.status).toBe(301);
             });
 
-            it.only('should not use old query params when processing chain redirects', async () => {
+            it('should not use old query params when processing chain redirects', async () => {
                 const mock = createMock('/fOo/?baz=1', 'baz=1');
 
                 // Mock that something has made a redirect before us
