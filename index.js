@@ -41,11 +41,14 @@ function removeTrailingSlashes(opts) {
             path = path.slice(0, -1);
             const query = querystring.length ? '?' + querystring : '';
 
-            const newURL = new URL(path + query, ctx.request.URL);
-
-            if (ctx.origin === newURL.origin) {
-                ctx.status = 301;
-                ctx.redirect(path + query);
+            try {
+                const newURL = new URL(path + query, ctx.request.URL);
+                if (ctx.origin === newURL.origin) {
+                    ctx.status = 301;
+                    ctx.redirect(path + query);
+                }
+            } catch (err) {
+                // Intentionally left blank. Can't parse the requested path as URL
             }
         }
 

@@ -25,6 +25,42 @@ describe('koa-remove-trailing-slashes', () => {
                 .get('//ev1l.example/')
                 .expect(404, done);
         });
+
+        describe('path traversal attempts', () => {
+            it('handles /////', (done) => {
+                const app = new Koa();
+                app.use(removeTrailingSlashes());
+
+                request(app.listen())
+                    .get('/////')
+                    .expect(404, done);
+            });
+            it('handles /%2F', (done) => {
+                const app = new Koa();
+                app.use(removeTrailingSlashes());
+
+                request(app.listen())
+                    .get('/%2F')
+                    .expect(404, done);
+            });
+            it('handles /..//', (done) => {
+                const app = new Koa();
+                app.use(removeTrailingSlashes());
+
+                request(app.listen())
+                    .get('/..//')
+                    .expect('Location', '/../')
+                    .expect(301, done);
+            });
+            it('handles //..//', (done) => {
+                const app = new Koa();
+                app.use(removeTrailingSlashes());
+
+                request(app.listen())
+                    .get('//..//')
+                    .expect(404, done);
+            });
+        });
     });
 
     describe('defer = false', () => {
