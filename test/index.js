@@ -16,6 +16,15 @@ describe('koa-remove-trailing-slashes', () => {
                 .expect('Location', '/foo')
                 .expect(301, done);
         });
+
+        it('does not redirect to malicious domains', (done) => {
+            const app = new Koa();
+            app.use(removeTrailingSlashes());
+
+            request(app.listen())
+                .get('//ev1l.example/')
+                .expect(404, done);
+        });
     });
 
     describe('defer = false', () => {
@@ -104,6 +113,24 @@ describe('koa-remove-trailing-slashes', () => {
                 expect(mock.ctx.status).toBe(301);
             });
 
+            it('Should not modify protocol-relative redirects', async () => {
+                const mock = createMock('/fOo/?baz=1', 'baz=1');
+
+                // Mock that something has made a redirect before us
+                mock.ctx.status = 301;
+                mock.ctx.body = 'Redirecting to …';
+                mock.ctx.response = {
+                    get() {
+                        return '//another-domain.com/external/';
+                    }
+                };
+
+                await removeTrailingSlashes()(mock.ctx, mock.next);
+
+                expect(mock.redirectMock).toNotHaveBeenCalled();
+                expect(mock.ctx.status).toBe(301);
+            });
+
             it('should redirect on url and path has trailing slash', async () => {
                 const mock = createMock('/foo/');
                 await removeTrailingSlashes()(mock.ctx, mock.next);
@@ -157,6 +184,10 @@ function createMock(originalUrl, querystring) {
         ctx: {
             querystring: querystring,
             originalUrl: originalUrl,
+            origin: 'https://example.com',
+            request: {
+                URL: new URL(originalUrl + '?' + querystring, 'https://example.com')
+            },
             status: undefined,
             redirect: redirectMock
         },

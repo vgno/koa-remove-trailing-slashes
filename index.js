@@ -41,8 +41,12 @@ function removeTrailingSlashes(opts) {
             path = path.slice(0, -1);
             const query = querystring.length ? '?' + querystring : '';
 
-            ctx.status = 301;
-            ctx.redirect(path + query);
+            const newURL = new URL(path + query, ctx.request.URL);
+
+            if (ctx.origin === newURL.origin) {
+                ctx.status = 301;
+                ctx.redirect(path + query);
+            }
         }
 
         if (!opts.defer) {
