@@ -1,5 +1,7 @@
 'use strict';
 
+const URL = require('url').URL;
+
 module.exports = removeTrailingSlashes;
 
 function removeTrailingSlashes(opts) {

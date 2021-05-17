@@ -4,6 +4,7 @@ const expect = require('expect');
 const Koa = require('koa');
 const request = require('supertest');
 const removeTrailingSlashes = require('../');
+const URL = require('url').URL;
 
 describe('koa-remove-trailing-slashes', () => {
     describe('running in Koa', () => {
